@@ -1,6 +1,7 @@
 package com.austinevick.speechrecognitionapp.di
 
 
+import com.austinevick.speechrecognitionapp.APIKEY
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.BlockThreshold
@@ -23,7 +24,7 @@ object AppModule {
     @Singleton
     fun provideGenerativeModel() = GenerativeModel(
         modelName = "gemini-2.0-flash-exp",
-        apiKey = "AIzaSyAfT5UM-gIpaSNXv77Rt6wjruuF1aD44NA",
+        apiKey = APIKEY,
         generationConfig = generationConfig {
             temperature = 1f
             topK = 40

@@ -2,11 +2,9 @@ package com.austinevick.speechrecognitionapp.di
 
 
 import com.austinevick.speechrecognitionapp.APIKEY
-import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.HarmCategory
-import com.google.ai.client.generativeai.type.RequestOptions
 import com.google.ai.client.generativeai.type.SafetySetting
 import com.google.ai.client.generativeai.type.generationConfig
 import dagger.Module

@@ -1,5 +1,6 @@
 package com.austinevick.speechrecognitionapp.ui
 
+import android.util.Log
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -24,6 +25,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
@@ -62,6 +64,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.speechUiState.collectAsState()
+
     val prompt = remember { mutableStateOf("") }
 
     val infiniteTransition =
@@ -92,17 +95,18 @@ fun HomeScreen(
     if (uiState.value.response.isNotEmpty()) {
         LaunchedEffect(uiState.value.response) {
             viewModel.textToSpeechHandler(uiState.value.response)
+            viewModel.setSpeaking(true)
         }
     }
 
 
     Scaffold(
         topBar = {
-            TopAppBar(title = {
+            CenterAlignedTopAppBar(title = {
                 Text("Speech Recognition App")
             },
                 actions = {
-                    IconButton(onClick = {
+                 if(uiState.value.isSpeaking)  IconButton(onClick = {
                         viewModel.stopTextToSpeech()
                     }) {
                         Icon(painterResource(R.drawable.record_voice_over_24),
@@ -125,7 +129,7 @@ fun HomeScreen(
            if (prompt.value.isEmpty()) Text(
                 if (uiState.value.prompt.isEmpty())
                     "Your speech will appear here"
-                else uiState.value.prompt.substring(0).toUpperCase(),
+                else uiState.value.prompt.substring(0).uppercase(),
                 color =if (uiState.value.prompt.isEmpty()) Color.Gray else Color.Black,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold

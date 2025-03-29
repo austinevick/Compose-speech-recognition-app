@@ -28,8 +28,6 @@ class HomeViewModel @Inject constructor(
     private var textToSpeech: TextToSpeech? = null
     private var intent: Intent? = null
 
-    private var _isListening = MutableStateFlow(false)
-    val isListening = _isListening.asStateFlow()
 
     private var _speechUiState = MutableStateFlow(SpeechUiState())
     val speechUiState = _speechUiState.asStateFlow()
@@ -40,21 +38,21 @@ class HomeViewModel @Inject constructor(
         initTextToSpeech()
     }
 
-    fun setListening(isListening: Boolean) {
-        _isListening.value = isListening
+    fun setSpeaking(isSpeaking: Boolean) {
+      _speechUiState.update { state ->
+          state.copy(
+              isSpeaking = isSpeaking
+          )
+      }
     }
 
-    fun setListening() {
-        _isListening.value = !_isListening.value
-    }
 
     fun startListening() {
         speechRecognizer?.startListening(intent)
     }
 
-
     fun textToSpeechHandler(text: String) {
-            textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
+        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
     fun stopTextToSpeech() {
@@ -84,8 +82,8 @@ class HomeViewModel @Inject constructor(
                         isLoading = false
                     )
                 }
-                Log.d("response",response.toString())
-                Log.d("response",response.text.toString())
+                Log.d("response", response.toString())
+                Log.d("response", response.text.toString())
             } catch (e: Exception) {
                 Log.d("data", e.message.toString())
                 _speechUiState.update { state ->
@@ -173,6 +171,7 @@ class HomeViewModel @Inject constructor(
 
 data class SpeechUiState(
     val isLoading: Boolean = false,
+    val isSpeaking: Boolean = false,
     val prompt: String = "",
     val response: String = ""
 )
